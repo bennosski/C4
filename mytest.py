@@ -23,6 +23,8 @@ def draw_board(state):
 
 def draw_board2(state):
 
+    print "hello"
+
     line = '___'
     for c in range(6):
         line += ' ___'
