@@ -1,30 +1,67 @@
 
 from numpy import *
-
-state = zeros([6,7,2])
-state[1,1,1] = 1
-state[5,4,0] = 1
-
-draw_board(state)
-
-
+import time
+import subprocess
 
 def draw_board(state):
 
-    print ' ______ '
+    print ' _______ '
 
     for r in range(6):
-        print '|',
+        line = '|'
         for c in range(7):
-            if(state[0,r,c]==0 and stae[1,r,c]==0):
-                print " "
+            if(state[0,r,c]==0 and state[1,r,c]==0):
+                line += " "
             elif(state[0,r,c]==1):
-                print u'\u2605'
+                line += u'\u2605'
             elif(state[1,r,c]==1):
-                print u'\u2622'
-        print '|'
+                line += u'\u2622'
+        line += '|'
+        print line
+    print ' ------- '
 
-    print ' ------ '
 
-    
-    
+def draw_board2(state):
+
+    line = '___'
+    for c in range(6):
+        line += ' ___'
+    print line+'\''
+       
+    for r in range(6):
+        line = '|'
+        for c in range(7):
+            line += '   |'
+        print line
+        
+        line = '|'
+        for c in range(7):
+            if(state[0,r,c]==0 and state[1,r,c]==0):
+                line += '   |'
+            elif(state[0,r,c]==1):
+                line += ' '+u'\u2605'+' |'
+            elif(state[1,r,c]==1):
+                line += ' '+u'\u2622'+' |'
+        print line
+
+        line = '|'
+        for c in range(7):
+            line += '___|'
+        print line
+        
+
+state = zeros([2,6,7])
+state[1,1,1] = 1
+state[0,5,4] = 1
+
+subprocess.call(["printf", "'\033c'"])
+
+draw_board2(state)
+
+time.sleep(1.0)
+subprocess.call(["printf", "'\033c'"])
+
+draw_board2(state)
+
+
+
