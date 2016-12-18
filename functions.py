@@ -89,11 +89,8 @@ def prepare_input2b2(state):
         output_max[i] = amax(output[i,:,:])
         
     return output_max
-    
-
 
 def prepare_input4b1(state):
-
     output_max = zeros(26)
 
     m = zeros([2,4])
@@ -156,8 +153,29 @@ def prepare_input4b1(state):
                 index += 4
                 index += argmin(m[1:])
 
-            output_max[index] = 1
-
-            
+            output_max[index] = 1            
     return output_max
             
+def prepare_NN_input(states):
+    L = len(states)
+    input_state =  zeros([L,2,6,7])
+    input_2b2 = zeros([L,49,1])
+    input_4b1 = zeros([L,26,1])
+    
+    for s_index in range(L):
+        
+        input_vec_2b2 = prepare_input2b2(state)
+        input_vec_4b1 = prepare_input4b1(state)
+
+        input_state = zeros([1,2,6,7])
+        for i in range(2):
+            for j in range(6):
+                for k in range(7):
+                    input_state[s_index,i,j,k] = state[i,j,k]
+                    
+        input_2b2 = zeros([1,49,1])
+        input_4b1 = zeros([1,26,1])
+        input_2b2[s_index,:,0] = input_vec_2b2
+        input_4b1[s_index,:,0] = input_vec_4b1
+
+    return [input_2b2, input_4b1, input_state]
