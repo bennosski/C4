@@ -8,13 +8,14 @@ def test():
     print 'test ',x[4:6]
 
     m = zeros([2,2,2])
-    m[1,0,0] = 1
+    m[1,0,0] = 4
     m[0,1,1] = 1
 
     print sum(m)
+    print amax(m)
     
 
-def prepare_input(state):
+def prepare_input2b2(state):
     
     output = zeros([49,5,6])
     m = zeros([2,2,2])
@@ -73,5 +74,9 @@ def prepare_input(state):
             print type(index),r,c
             output[index,r,c] = 1.0
 
-    return output
+    output_max = zeros(49)
+    for i in range(49):
+        output_max[i] = amax(output[i,:,:])
+        
+    return output_max
     

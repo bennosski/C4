@@ -16,17 +16,19 @@ state[0,4,1] = 1
 state[1,3,1] = 1
 state[0,5,2] = 1
 
-myinput = prepare_input(state)
 
-main_input = Input(shape=(49,5,6), dtype='float32', name='main_input')
+main_input = Input(shape=(2,6,7), dtype='float32', name='main_input')
 
-conv = (Convolution2D(100, 2, 2, border_mode="valid",
-                                 activation="relu",
-                                 subsample=(1,1)))(main_input)
-        
-pool1 = (MaxPooling2D(pool_size=(1,1), strides=(1,1), border_mode='valid',dim_ordering='th'))(conv)
-        
-dropout = (Dropout(0.2))(pool1)
+conv2b2 = (Convolution2D(49, 2, 2, border_mode="valid",
+                                   activation="relu",
+                                   subsample=(1,1)))(main_input)
+pool2b2 = (MaxPooling2D(pool_size=(5,6), strides=(1,1), border_mode='valid',dim_ordering='th'))(conv2b2)
+dropout2b2 = (Dropout(0.2))(pool2b2)
+
+
+
+
+
 
 model = Model(input=main_input, output=dropout)
 
