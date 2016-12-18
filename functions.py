@@ -96,19 +96,68 @@ def prepare_input4b1(state):
 
     output_max = zeros(26)
 
-    temp = zeros([26,3,7])
     m = zeros([2,4])
     for r in range(3):
         for c in range(7):
             m = state[:,r:r+4,c]
 
-            if(m[1,1:4] == asarray[1,1,1]):
+            if(m[0,1:4].all() == 1):
                 output_max[0] = 1
-            if(m[0,1:4] == asarray[1,1,1]):
+            if(m[1,1:4].all() == 1):
                 output_max[1] = 1
 
-
                 
+    m = zeros([2,4])
+    for r in range(6):
+        for c in range(4):
+            m = state[:,r,c:c+4]
+
+            index = 2
+            if(sum(m[0,:]) == 3):
+                index += 0
+                index += argmin(m[0,:])
+                
+            if(sum(m[1,:]) == 3):
+                index += 4
+                index += argmin(m[1:])
+
+            output_max[index] = 1
+
+    m = zeros([2,4])
+    for r in range(3):
+        for c in range(4):
+            for i in range(4):
+                m[:,i] = state[:,r+3-i,c+i]
+
+            index = 10
+            if(sum(m[0,:]) == 3):
+                index += 0
+                index += argmin(m[0,:])
+                
+            if(sum(m[1,:]) == 3):
+                index += 4
+                index += argmin(m[1:])
+
+            output_max[index] = 1
+
+                                
+    m = zeros([2,4])
+    for r in range(3):
+        for c in range(4):
+            for i in range(4):
+                m[:,i] = state[:,r+i,c+i]
+
+            index = 18
+            if(sum(m[0,:]) == 3):
+                index += 0
+                index += argmin(m[0,:])
+                
+            if(sum(m[1,:]) == 3):
+                index += 4
+                index += argmin(m[1:])
+
+            output_max[index] = 1
+
             
-            
+    return output_max
             

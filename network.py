@@ -22,8 +22,8 @@ dropout2b2 = (Dropout(0.2))(input2b2)
 
 
 input_vec_4b1 = prepare_input4b1(state)
-input4b1 = Input(shape(38), dtype='float32', name='input4b1')
-drouput4b1 = (Dropout(0.2))(input4b1)
+input4b1 = Input(shape(26), dtype='float32', name='input4b1')
+dropout4b1 = (Dropout(0.2))(input4b1)
 
 
 main_input = Input(shape=(2,6,7), dtype='float32', name='main_input')
@@ -33,13 +33,12 @@ conv = (Convolution2D(100, 3, 3, border_mode="valid",
 pool = (MaxPooling2D(pool_size=(4,5), strides=(1,1), border_mode='valid',dim_ordering='th'))(conv)
 dropout = (Dropout(0.2))(pool)
 
+m = merge([dropout2b2, dropout4b1, dropout], 'concat')
+
+myoutput = (Dense(input_dim=49+26+100, output_dim=1, activation='sigmoid'))(m)
 
 
-#merge the outputs
-#dense layer sigmoid 1 output
-
-
-model = Model(input=[input2b2, main_input], output=dropout)
+model = Model(input=[input2b2, main_input], output=myoutput)
 
 model.compile(loss='binary_crossentropy', optimizer='rmsprop')
 
