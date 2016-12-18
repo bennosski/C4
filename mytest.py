@@ -2,6 +2,7 @@
 from numpy import *
 import time
 import subprocess
+from functions import *
 
 def draw_board(state):
 
@@ -65,5 +66,7 @@ subprocess.call(["printf", "'\033c'"])
 
 draw_board2(state)
 
+
+test()
 
 
