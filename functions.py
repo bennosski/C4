@@ -163,10 +163,11 @@ def prepare_NN_input(states):
     input_4b1 = zeros([L,26,1])
     
     for s_index in range(L):
+        state = states[s_index]
         
         input_vec_2b2 = prepare_input2b2(state)
         input_vec_4b1 = prepare_input4b1(state)
-
+        
         input_state = zeros([1,2,6,7])
         for i in range(2):
             for j in range(6):

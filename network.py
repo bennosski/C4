@@ -37,13 +37,14 @@ model.compile(loss='binary_crossentropy', optimizer='rmsprop')
 
 print model.summary()
 
-#state = zeros([2,6,7], dtype=int)
-#state[1,5,1] = 1
-#state[0,4,1] = 1
-#state[1,3,1] = 1
-#state[0,5,2] = 1
-
-
+state = zeros([2,6,7], dtype=int)
+state[1,5,1] = 1
+state[0,4,1] = 1
+state[1,3,1] = 1
+state[0,5,2] = 1
+states = []
+states.append(state)
+NN_input = prepare_NN_input(states)
 y = model.predict(NN_input, verbose=1)
 print "the prediction is ", y
 
