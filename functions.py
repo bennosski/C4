@@ -81,7 +81,6 @@ def prepare_input2b2(state):
             if(index==-1):
                 print 'error'
                 
-            print type(index),r,c
             output[index,r,c] = 1.0
 
     output_max = zeros(49)
@@ -180,3 +179,71 @@ def prepare_NN_input(states):
         input_4b1[s_index,:,0] = input_vec_4b1
 
     return [input_2b2, input_4b1, input_state]
+
+
+def find_available_states(state):
+
+    out = []
+
+    for c in range(7):
+        high_row = sum(state[:,:,c])
+
+        if(high_row<=5):
+            temp = state.copy()
+            temp[0,5-high_row,c] = 1
+            out.append(temp)
+
+    return out
+
+
+def check_game_over(mystate):
+    states = find_available_states(mystate)
+
+    for state in states:
+
+        if(vertical4(state)):
+            return True
+        if(horizontal4(state)):
+            return True
+        if(diagonal4(state)):
+            return True
+
+    return False
+        
+
+def vertical4(state):
+    
+    for r in range(3):
+        for c in range(7):
+            if(sum(state[0,r:r+4,c])==4):
+                return True
+    return False
+
+def horizontal4(state):
+    for r in range(6):
+        for c in range(4):
+            if(sum(state[0,r,c:c+4])==4):
+                return True
+            
+    return False
+
+def diagonal4(state):
+    for r in range(3,6):
+        for c in range(4):
+            m = zeros(4)
+            for i in range(4):
+                m[i] = state[0,r-i,c+i]
+            if(sum(m)==4):
+                return True
+
+    for r in range(3):
+        for c in range(4):
+            m = zeros(4)
+            for i in range(4):
+                m[i] = state[0,r+i,c+i]
+            if(sum(m)==4):
+                return True
+            
+    return False
+
+    
