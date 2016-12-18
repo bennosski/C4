@@ -13,6 +13,16 @@ def test():
 
     print sum(m)
     print amax(m)
+
+    z = zeros(4, dtype=int)
+    z[1] = 1
+    z[2] = 1
+    z[3] = 1
+
+    if(z[1:4] == asarray([1,1,1])):
+        print "worked"
+    else:
+        print "didn't work"
     
 
 def prepare_input2b2(state):
@@ -80,3 +90,25 @@ def prepare_input2b2(state):
         
     return output_max
     
+
+
+def prepare_input4b1(state):
+
+    output_max = zeros(26)
+
+    temp = zeros([26,3,7])
+    m = zeros([2,4])
+    for r in range(3):
+        for c in range(7):
+            m = state[:,r:r+4,c]
+
+            if(m[1,1:4] == asarray[1,1,1]):
+                output_max[0] = 1
+            if(m[0,1:4] == asarray[1,1,1]):
+                output_max[1] = 1
+
+
+                
+            
+            
+            
