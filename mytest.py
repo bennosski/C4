@@ -53,20 +53,36 @@ def draw_board2(state):
         print line
         
 
-state = zeros([2,6,7])
-state[1,1,1] = 1
-state[0,5,4] = 1
+state = zeros([2,6,7], dtype=int)
+state[1,5,1] = 1
+state[0,4,1] = 1
+state[1,3,1] = 1
+state[0,5,2] = 1
 
-subprocess.call(["printf", "'\033c'"])
+
+subprocess.call(["printf", "\033c"])
 
 draw_board2(state)
 
 time.sleep(1.0)
-subprocess.call(["printf", "'\033c'"])
+
+subprocess.call(["printf", "\033c"])
 
 draw_board2(state)
+
 
 
 test()
 
 
+time.sleep(1.0)
+
+myinput = prepare_input(state)
+
+print myinput[:,:,0]
+print "end "
+print myinput[:,:,1]
+print "end"
+print myinput[:,:,2]
+print "end"
+print myinput[:,:,3]
