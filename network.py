@@ -118,18 +118,35 @@ for game in range(n_games):
 
     fractions = linspace(0.05, 1, turn)
 
+    loser = True
     for t in range(turn-1,-1,-1): #from turn-1 to 0 loop
-        print t
-
+        print 'learning for turn',t
+        
         m = turns_moves[t]
-        p = turns_predictions[m]
+        p = turns_predictions[t][m]
+        print p
+        
+        if(loser):
+            change = p*fractions[t]
+            pnew = p - change
+            loser = False
+        else:
+            change = (1.0-p)*fractions[t]
+            pnew = p + change
+            loser = True
+            
+        sum_p = sum(turns_predictions[t]) - turns_predictions[t][m]
+        scale = (sum_p - change)/sum_p
+        
+        p_true = scale*turns_predictions[t]
+        p_true[m] = pnew
+        print p_true
+        
+        model.fit(turns_states[t], p_true, nb_epoch=1, verbose=1)
 
-        
-        
-        
-    
+                    
 
-draw_board(state) 
+#draw_board(state) 
 
 
 weights = model.layers[1].get_weights()
