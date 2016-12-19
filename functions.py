@@ -249,7 +249,18 @@ def check_game_over(mystate):
             return True,state
 
     return False,mystate
-        
+
+def check_game_over_current(mystate):
+    
+    if(vertical4(state)):
+        return True
+    if(horizontal4(state)):
+        return True
+    if(diagonal4(state)):
+        return True
+
+    return False
+
 
 def vertical4(state):
     

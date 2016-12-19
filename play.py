@@ -6,12 +6,12 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.models import Model 
 from keras.optimizers import SGD
 
-print k.__version__
+#print k.__version__
 
 from numpy import *
 import numpy as np
-from functions import *
 import sys
+from functions import *
 
 input2b2 = Input(shape=(49,1), dtype='float32', name='input2b2')
 dropout2b2 = (Dropout(0.2))(input2b2)
@@ -36,12 +36,11 @@ myoutput = (Dense(input_dim=49+26+100, output_dim=1, activation='sigmoid'))(m)
 model = Model(input=[input2b2, input4b1, main_input], output=myoutput)
 
 
-if(sys.argv[1]=='load'):
-    weights = [load('weights/conv_weights0.npy'), load('weights/conv_weights1.npy')]
-    model.layers[1].set_weights(weights)
+weights = [load('weights/conv_weights0.npy'), load('weights/conv_weights1.npy')]
+model.layers[1].set_weights(weights)
 
-    weights = [load('weights/dense_weights0.npy'), load('weights/dense_weights1.npy')]
-    model.layers[12].set_weights(weights)    
+weights = [load('weights/dense_weights0.npy'), load('weights/dense_weights1.npy')]
+model.layers[12].set_weights(weights)    
 
 #learning_rate = 0.1
 #momentum = 0.8
@@ -75,16 +74,116 @@ p = random.randint(0,1)
 
 game_over = False
 
-while(not game_over)
+import curses
+stdscr = curses.initscr()
+curses.cbreak()
+stdscr.keypad(1)
+stdscr.refresh()
+
+y = 10
+x = 50
+
+yo = y - 1
+xo = x + 2
+
+arrow_col = 0
 
 
+def drawboardcurses(state, x, y, stdscr):
+
+    stdscr.refresh()
+    stdscr.addstr(y, x,     ' ___ ___ ___ ___ ___ ___ ___ ')
+    stdscr.addstr(y+1, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+2, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+3, x,   '|___|___|___|___|___|___|___|')    
+    stdscr.addstr(y+4, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+5, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+6, x,   '|___|___|___|___|___|___|___|')    
+    stdscr.addstr(y+7, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+8, x,   '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+9, x,   '|___|___|___|___|___|___|___|')    
+    stdscr.addstr(y+10, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+11, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+12, x,  '|___|___|___|___|___|___|___|')    
+    stdscr.addstr(y+13, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+14, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+15, x,  '|___|___|___|___|___|___|___|')    
+    stdscr.addstr(y+16, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+17, x,  '|   |   |   |   |   |   |   |')
+    stdscr.addstr(y+18, x,  '|___|___|___|___|___|___|___|')  
+    
+
+    for r in range(6):
+       for c in range(7):
+           if(state[0,r,c]==1):
+               stdscr.addstr(y+2+3*r,x+2+4*c,'O')
+            
+    for r in range(6):
+       for c in range(7):
+           if(state[1,r,c]==1):
+               stdscr.addstr(y+2+3*r,x+2+4*c,'X')
+                
+
+while(not game_over and sum(state)<42):
+    
+    if(p==1): #human move
+
+        key = ''
+        while key != curses.KEY_DOWN:
+
+            key = stdscr.getch()
+
+            if key == curses.KEY_RIGHT:
+                if(xo < x + 2 + 4*6):
+                    xo += 4
+                    arrow_col += 1
+            if key == curses.KEY_LEFT:
+                if(xo > x + 2): 
+                    xo -= 4
+                    arrow_col -= 1
+
+            drawboardcurses(state, x, y, stdscr)
+                    
+            stdscr.addstr(y-2 ,x+2, '                             ')
+            stdscr.addstr(y-1 ,x+2, '                             ')
+            stdscr.addstr(yo-1,xo,'|')
+            stdscr.addstr(yo,  xo, 'v')   
+            
+            stdscr.addstr(35,25, 'cursor -> ')
+            stdscr.refresh()
+
+        next_row = 5-sum(state[:,:,arrow_col])
+        state[1,next_row,arrow_col] = 1
+
+        p = (p+1)%2
+        
+    else: #p==0 computer's move
+
+        #find available moves and generate available states
+        available_states = find_available_states(state)
+        NN_input = prepare_NN_input(available_states)
+        
+        #predict on available states. save states and predictions.
+        y = model.predict(NN_input)
+        #print 'predictions are : ',y
+
+        #update state
+        best_move = argmax(y)
+        state = available_states[best_move]
+
+        p = (p+1)%2
+
+        
+    drawboardcurses(state, x, y, stdscr)
+    game_over = check_game_over_current(state)
 
 
+while key != curses.KEY_DOWN:
+    key = stdscr.getch()
 
+    stdscr.addstr(35,25, 'press down to escape')
 
-
-
-
+curses.endwin()
 
 
 
