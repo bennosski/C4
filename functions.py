@@ -3,7 +3,7 @@ import time
 import subprocess
 
 
-def draw_board(state):
+def draw_board(state, arrow_col):
 
     p1 = u'\u2605'
     p2 = u'\u2622'
@@ -13,6 +13,14 @@ def draw_board(state):
     
     print ""
     print ""
+    print ""
+
+    for c in range(arrow_col):
+        print '    '
+    print '  |'
+    for c in range(arrow_col):
+        print '    '
+    print '  v'
     
     line = ' ___'
     for c in range(6):
