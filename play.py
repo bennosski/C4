@@ -164,11 +164,11 @@ while(not game_over and sum(state)<42):
         NN_input = prepare_NN_input(available_states)
         
         #predict on available states. save states and predictions.
-        y = model.predict(NN_input)
+        pred = model.predict(NN_input)
         #print 'predictions are : ',y
 
         #update state
-        best_move = argmax(y)
+        best_move = argmax(pred)
         state = available_states[best_move]
 
         p = (p+1)%2
