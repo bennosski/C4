@@ -1,5 +1,45 @@
 
 from numpy import *
+import time
+import subprocess
+
+
+def draw_board(state):
+
+    p1 = u'\u2605'
+    p2 = u'\u2622'
+
+    p1 = '0'
+    p2 = '1'
+    
+    print ""
+    print ""
+    
+    line = ' ___'
+    for c in range(6):
+        line += ' ___'
+    print line+'\''
+       
+    for r in range(6):
+        line = '|'
+        for c in range(7):
+            line += '   |'
+        print line
+        
+        line = '|'
+        for c in range(7):
+            if(state[0,r,c]==0 and state[1,r,c]==0):
+                line += '   |'
+            elif(state[0,r,c]==1):
+                line += ' '+p1+' |'
+            elif(state[1,r,c]==1):
+                line += ' '+p2+' |'
+        print line
+
+        line = '|'
+        for c in range(7):
+            line += '___|'
+        print line
 
 
 def test():
@@ -167,14 +207,11 @@ def prepare_NN_input(states):
         input_vec_2b2 = prepare_input2b2(state)
         input_vec_4b1 = prepare_input4b1(state)
         
-        input_state = zeros([1,2,6,7])
         for i in range(2):
             for j in range(6):
                 for k in range(7):
                     input_state[s_index,i,j,k] = state[i,j,k]
                     
-        input_2b2 = zeros([1,49,1])
-        input_4b1 = zeros([1,26,1])
         input_2b2[s_index,:,0] = input_vec_2b2
         input_4b1[s_index,:,0] = input_vec_4b1
 
@@ -199,16 +236,19 @@ def find_available_states(state):
 def check_game_over(mystate):
     states = find_available_states(mystate)
 
+    if(len(states)==0):
+        return True,mystate
+    
     for state in states:
 
         if(vertical4(state)):
-            return True
+            return True,state
         if(horizontal4(state)):
-            return True
+            return True,state
         if(diagonal4(state)):
-            return True
+            return True,state
 
-    return False
+    return False,mystate
         
 
 def vertical4(state):
