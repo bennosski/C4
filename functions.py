@@ -265,14 +265,14 @@ def vertical4(state):
     
     for r in range(3):
         for c in range(7):
-            if(sum(state[0,r:r+4,c])==4):
+            if(sum(state[0,r:r+4,c])==4 or sum(state[1,r:r+4,c])==4):
                 return True
     return False
 
 def horizontal4(state):
     for r in range(6):
         for c in range(4):
-            if(sum(state[0,r,c:c+4])==4):
+            if(sum(state[0,r,c:c+4])==4 or sum(state[1,r,c:c+4])==4):
                 return True
             
     return False
@@ -280,19 +280,21 @@ def horizontal4(state):
 def diagonal4(state):
     for r in range(3,6):
         for c in range(4):
-            m = zeros(4)
-            for i in range(4):
-                m[i] = state[0,r-i,c+i]
-            if(sum(m)==4):
-                return True
+            for p in range(2):
+                m = zeros(4)
+                for i in range(4):
+                    m[i] = state[p,r-i,c+i]
+                    if(sum(m)==4):
+                        return True
 
     for r in range(3):
         for c in range(4):
-            m = zeros(4)
-            for i in range(4):
-                m[i] = state[0,r+i,c+i]
-            if(sum(m)==4):
-                return True
+            for p in range(2):
+                m = zeros(4)
+                for i in range(4):
+                    m[i] = state[p,r+i,c+i]
+                    if(sum(m)==4):
+                        return True
             
     return False
 
