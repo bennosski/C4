@@ -237,7 +237,7 @@ def check_game_over(mystate):
     states = find_available_states(mystate)
 
     if(len(states)==0):
-        return True,mystate
+        return False,mystate
     
     for state in states:
 
