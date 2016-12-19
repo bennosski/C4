@@ -12,6 +12,7 @@ from numpy import *
 import numpy as np
 import sys
 from functions import *
+import time
 
 input2b2 = Input(shape=(49,1), dtype='float32', name='input2b2')
 dropout2b2 = (Dropout(0.2))(input2b2)
@@ -70,7 +71,8 @@ print "the prediction is ", y
 
 state = zeros([2,6,7], dtype=int)
 
-p = random.randint(0,1)
+#p = random.randint(0,1)
+p = 1
 
 game_over = False
 
@@ -127,8 +129,10 @@ def drawboardcurses(state, x, y, stdscr):
 while(not game_over and sum(state)<42):
     
     if(p==1): #human move
-
         key = ''
+        if key == ord('q'):
+            break
+        
         while key != curses.KEY_DOWN:
 
             key = stdscr.getch()
@@ -173,8 +177,10 @@ while(not game_over and sum(state)<42):
 
         p = (p+1)%2
 
+        time.sleep(0.5)
         
     drawboardcurses(state, x, y, stdscr)
+    stdscr.refresh()
     game_over = check_game_over_current(state)
 
 
@@ -183,6 +189,8 @@ while key != curses.KEY_DOWN:
 
     stdscr.addstr(35,25, 'press down to escape')
 
+time.sleep(5.0)
+    
 curses.endwin()
 
 
